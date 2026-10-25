@@ -1,0 +1,401 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище СистемаФормированияЗаявокСервисаАрендыАвтомобилейModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Автомобили">
+          <Key>
+            <PropertyRef Name="КодАвтомобиля" />
+          </Key>
+          <Property Name="КодАвтомобиля" Type="int" Nullable="false" />
+          <Property Name="ГосНомер" Type="nvarchar" MaxLength="9" Nullable="false" />
+          <Property Name="VIN" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Марка" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Модель" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ГодВыпуска" Type="smallint" Nullable="false" />
+          <Property Name="Цвет" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="СтоимостьВДень" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="ИныеПризнаки" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Заявки">
+          <Key>
+            <PropertyRef Name="КодЗаявки" />
+          </Key>
+          <Property Name="КодЗаявки" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ДатаНачала" Type="date" Nullable="false" />
+          <Property Name="ДатаОкончания" Type="date" Nullable="false" />
+          <Property Name="ОбщаяСтоимость" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="КодАвтомобиля" Type="int" Nullable="false" />
+          <Property Name="КодКлиента" Type="int" Nullable="false" />
+          <Property Name="КодСтатуса" Type="int" Nullable="false" />
+          <Property Name="КодСотрудника" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Клиенты">
+          <Key>
+            <PropertyRef Name="КодКлиента" />
+          </Key>
+          <Property Name="КодКлиента" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Фамилия" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Имя" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Отчество" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Телефон" Type="nvarchar" MaxLength="12" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Сотрудники">
+          <Key>
+            <PropertyRef Name="КодСотрудника" />
+          </Key>
+          <Property Name="КодСотрудника" Type="int" Nullable="false" />
+          <Property Name="Фамилия" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Имя" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Отчество" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ДатаНайма" Type="date" Nullable="false" />
+          <Property Name="Должность" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Логин" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="ХешПароля" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="СтатусЗаявки">
+          <Key>
+            <PropertyRef Name="КодСтатуса" />
+          </Key>
+          <Property Name="КодСтатуса" Type="int" Nullable="false" />
+          <Property Name="Название" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Заявки_Автомобили">
+          <End Role="Автомобили" Type="Self.Автомобили" Multiplicity="1" />
+          <End Role="Заявки" Type="Self.Заявки" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Автомобили">
+              <PropertyRef Name="КодАвтомобиля" />
+            </Principal>
+            <Dependent Role="Заявки">
+              <PropertyRef Name="КодАвтомобиля" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Заявки_Клиенты">
+          <End Role="Клиенты" Type="Self.Клиенты" Multiplicity="1" />
+          <End Role="Заявки" Type="Self.Заявки" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Клиенты">
+              <PropertyRef Name="КодКлиента" />
+            </Principal>
+            <Dependent Role="Заявки">
+              <PropertyRef Name="КодКлиента" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Заявки_Сотрудники">
+          <End Role="Сотрудники" Type="Self.Сотрудники" Multiplicity="1" />
+          <End Role="Заявки" Type="Self.Заявки" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Сотрудники">
+              <PropertyRef Name="КодСотрудника" />
+            </Principal>
+            <Dependent Role="Заявки">
+              <PropertyRef Name="КодСотрудника" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Заявки_СтатусЗаявки1">
+          <End Role="СтатусЗаявки" Type="Self.СтатусЗаявки" Multiplicity="1" />
+          <End Role="Заявки" Type="Self.Заявки" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="СтатусЗаявки">
+              <PropertyRef Name="КодСтатуса" />
+            </Principal>
+            <Dependent Role="Заявки">
+              <PropertyRef Name="КодСтатуса" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище СистемаФормированияЗаявокСервисаАрендыАвтомобилейModelContainer">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Автомобили" EntityType="Self.Автомобили" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Заявки" EntityType="Self.Заявки" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Клиенты" EntityType="Self.Клиенты" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Сотрудники" EntityType="Self.Сотрудники" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="СтатусЗаявки" EntityType="Self.СтатусЗаявки" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Заявки_Автомобили" Association="Self.FK_Заявки_Автомобили">
+            <End Role="Автомобили" EntitySet="Автомобили" />
+            <End Role="Заявки" EntitySet="Заявки" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Заявки_Клиенты" Association="Self.FK_Заявки_Клиенты">
+            <End Role="Клиенты" EntitySet="Клиенты" />
+            <End Role="Заявки" EntitySet="Заявки" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Заявки_Сотрудники" Association="Self.FK_Заявки_Сотрудники">
+            <End Role="Сотрудники" EntitySet="Сотрудники" />
+            <End Role="Заявки" EntitySet="Заявки" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Заявки_СтатусЗаявки1" Association="Self.FK_Заявки_СтатусЗаявки1">
+            <End Role="СтатусЗаявки" EntitySet="СтатусЗаявки" />
+            <End Role="Заявки" EntitySet="Заявки" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="СистемаФормированияЗаявокСервисаАрендыАвтомобилейModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Автомобили">
+          <Key>
+            <PropertyRef Name="КодАвтомобиля" />
+          </Key>
+          <Property Name="КодАвтомобиля" Type="Int32" Nullable="false" />
+          <Property Name="ГосНомер" Type="String" MaxLength="9" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="VIN" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Марка" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Модель" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ГодВыпуска" Type="Int16" Nullable="false" />
+          <Property Name="Цвет" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="СтоимостьВДень" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="ИныеПризнаки" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Заявки" Relationship="Self.FK_Заявки_Автомобили" FromRole="Автомобили" ToRole="Заявки" />
+        </EntityType>
+        <EntityType Name="Заявки">
+          <Key>
+            <PropertyRef Name="КодЗаявки" />
+          </Key>
+          <Property Name="КодЗаявки" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ДатаНачала" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ДатаОкончания" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ОбщаяСтоимость" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="КодАвтомобиля" Type="Int32" Nullable="false" />
+          <Property Name="КодКлиента" Type="Int32" Nullable="false" />
+          <Property Name="КодСтатуса" Type="Int32" Nullable="false" />
+          <Property Name="КодСотрудника" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Автомобили" Relationship="Self.FK_Заявки_Автомобили" FromRole="Заявки" ToRole="Автомобили" />
+          <NavigationProperty Name="Клиенты" Relationship="Self.FK_Заявки_Клиенты" FromRole="Заявки" ToRole="Клиенты" />
+          <NavigationProperty Name="Сотрудники" Relationship="Self.FK_Заявки_Сотрудники" FromRole="Заявки" ToRole="Сотрудники" />
+          <NavigationProperty Name="СтатусЗаявки" Relationship="Self.FK_Заявки_СтатусЗаявки1" FromRole="Заявки" ToRole="СтатусЗаявки" />
+        </EntityType>
+        <EntityType Name="Клиенты">
+          <Key>
+            <PropertyRef Name="КодКлиента" />
+          </Key>
+          <Property Name="КодКлиента" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Фамилия" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Имя" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Отчество" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Телефон" Type="String" MaxLength="12" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Заявки" Relationship="Self.FK_Заявки_Клиенты" FromRole="Клиенты" ToRole="Заявки" />
+        </EntityType>
+        <EntityType Name="Сотрудники">
+          <Key>
+            <PropertyRef Name="КодСотрудника" />
+          </Key>
+          <Property Name="КодСотрудника" Type="Int32" Nullable="false" />
+          <Property Name="Фамилия" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Имя" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Отчество" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ДатаНайма" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Должность" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Логин" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ХешПароля" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Заявки" Relationship="Self.FK_Заявки_Сотрудники" FromRole="Сотрудники" ToRole="Заявки" />
+        </EntityType>
+        <EntityType Name="СтатусЗаявки">
+          <Key>
+            <PropertyRef Name="КодСтатуса" />
+          </Key>
+          <Property Name="КодСтатуса" Type="Int32" Nullable="false" />
+          <Property Name="Название" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Заявки" Relationship="Self.FK_Заявки_СтатусЗаявки1" FromRole="СтатусЗаявки" ToRole="Заявки" />
+        </EntityType>
+        <Association Name="FK_Заявки_Автомобили">
+          <End Role="Автомобили" Type="Self.Автомобили" Multiplicity="1" />
+          <End Role="Заявки" Type="Self.Заявки" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Автомобили">
+              <PropertyRef Name="КодАвтомобиля" />
+            </Principal>
+            <Dependent Role="Заявки">
+              <PropertyRef Name="КодАвтомобиля" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Заявки_Клиенты">
+          <End Role="Клиенты" Type="Self.Клиенты" Multiplicity="1" />
+          <End Role="Заявки" Type="Self.Заявки" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Клиенты">
+              <PropertyRef Name="КодКлиента" />
+            </Principal>
+            <Dependent Role="Заявки">
+              <PropertyRef Name="КодКлиента" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Заявки_Сотрудники">
+          <End Role="Сотрудники" Type="Self.Сотрудники" Multiplicity="1" />
+          <End Role="Заявки" Type="Self.Заявки" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Сотрудники">
+              <PropertyRef Name="КодСотрудника" />
+            </Principal>
+            <Dependent Role="Заявки">
+              <PropertyRef Name="КодСотрудника" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Заявки_СтатусЗаявки1">
+          <End Role="СтатусЗаявки" Type="Self.СтатусЗаявки" Multiplicity="1" />
+          <End Role="Заявки" Type="Self.Заявки" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="СтатусЗаявки">
+              <PropertyRef Name="КодСтатуса" />
+            </Principal>
+            <Dependent Role="Заявки">
+              <PropertyRef Name="КодСтатуса" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="СистемаФормированияЗаявокСервисаАрендыАвтомобилейEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Автомобили" EntityType="Self.Автомобили" />
+          <EntitySet Name="Заявки" EntityType="Self.Заявки" />
+          <EntitySet Name="Клиенты" EntityType="Self.Клиенты" />
+          <EntitySet Name="Сотрудники" EntityType="Self.Сотрудники" />
+          <EntitySet Name="СтатусЗаявки" EntityType="Self.СтатусЗаявки" />
+          <AssociationSet Name="FK_Заявки_Автомобили" Association="Self.FK_Заявки_Автомобили">
+            <End Role="Автомобили" EntitySet="Автомобили" />
+            <End Role="Заявки" EntitySet="Заявки" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Заявки_Клиенты" Association="Self.FK_Заявки_Клиенты">
+            <End Role="Клиенты" EntitySet="Клиенты" />
+            <End Role="Заявки" EntitySet="Заявки" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Заявки_Сотрудники" Association="Self.FK_Заявки_Сотрудники">
+            <End Role="Сотрудники" EntitySet="Сотрудники" />
+            <End Role="Заявки" EntitySet="Заявки" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Заявки_СтатусЗаявки1" Association="Self.FK_Заявки_СтатусЗаявки1">
+            <End Role="СтатусЗаявки" EntitySet="СтатусЗаявки" />
+            <End Role="Заявки" EntitySet="Заявки" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище СистемаФормированияЗаявокСервисаАрендыАвтомобилейModelContainer" CdmEntityContainer="СистемаФормированияЗаявокСервисаАрендыАвтомобилейEntities">
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="СистемаФормированияЗаявокСервисаАрендыАвтомобилейModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Автомобили">
+            <EntityTypeMapping TypeName="СистемаФормированияЗаявокСервисаАрендыАвтомобилейModel.Автомобили">
+              <MappingFragment StoreEntitySet="Автомобили">
+                <ScalarProperty Name="КодАвтомобиля" ColumnName="КодАвтомобиля" />
+                <ScalarProperty Name="ГосНомер" ColumnName="ГосНомер" />
+                <ScalarProperty Name="VIN" ColumnName="VIN" />
+                <ScalarProperty Name="Марка" ColumnName="Марка" />
+                <ScalarProperty Name="Модель" ColumnName="Модель" />
+                <ScalarProperty Name="ГодВыпуска" ColumnName="ГодВыпуска" />
+                <ScalarProperty Name="Цвет" ColumnName="Цвет" />
+                <ScalarProperty Name="СтоимостьВДень" ColumnName="СтоимостьВДень" />
+                <ScalarProperty Name="ИныеПризнаки" ColumnName="ИныеПризнаки" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Заявки">
+            <EntityTypeMapping TypeName="СистемаФормированияЗаявокСервисаАрендыАвтомобилейModel.Заявки">
+              <MappingFragment StoreEntitySet="Заявки">
+                <ScalarProperty Name="КодЗаявки" ColumnName="КодЗаявки" />
+                <ScalarProperty Name="ДатаНачала" ColumnName="ДатаНачала" />
+                <ScalarProperty Name="ДатаОкончания" ColumnName="ДатаОкончания" />
+                <ScalarProperty Name="ОбщаяСтоимость" ColumnName="ОбщаяСтоимость" />
+                <ScalarProperty Name="КодАвтомобиля" ColumnName="КодАвтомобиля" />
+                <ScalarProperty Name="КодКлиента" ColumnName="КодКлиента" />
+                <ScalarProperty Name="КодСтатуса" ColumnName="КодСтатуса" />
+                <ScalarProperty Name="КодСотрудника" ColumnName="КодСотрудника" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Клиенты">
+            <EntityTypeMapping TypeName="СистемаФормированияЗаявокСервисаАрендыАвтомобилейModel.Клиенты">
+              <MappingFragment StoreEntitySet="Клиенты">
+                <ScalarProperty Name="КодКлиента" ColumnName="КодКлиента" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Отчество" ColumnName="Отчество" />
+                <ScalarProperty Name="Телефон" ColumnName="Телефон" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Сотрудники">
+            <EntityTypeMapping TypeName="СистемаФормированияЗаявокСервисаАрендыАвтомобилейModel.Сотрудники">
+              <MappingFragment StoreEntitySet="Сотрудники">
+                <ScalarProperty Name="КодСотрудника" ColumnName="КодСотрудника" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Отчество" ColumnName="Отчество" />
+                <ScalarProperty Name="ДатаНайма" ColumnName="ДатаНайма" />
+                <ScalarProperty Name="Должность" ColumnName="Должность" />
+                <ScalarProperty Name="Логин" ColumnName="Логин" />
+                <ScalarProperty Name="ХешПароля" ColumnName="ХешПароля" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="СтатусЗаявки">
+            <EntityTypeMapping TypeName="СистемаФормированияЗаявокСервисаАрендыАвтомобилейModel.СтатусЗаявки">
+              <MappingFragment StoreEntitySet="СтатусЗаявки">
+                <ScalarProperty Name="КодСтатуса" ColumnName="КодСтатуса" />
+                <ScalarProperty Name="Название" ColumnName="Название" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

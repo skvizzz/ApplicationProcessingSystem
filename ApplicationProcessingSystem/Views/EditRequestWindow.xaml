@@ -1,0 +1,186 @@
+﻿<Window x:Class="ApplicationProcessingSystem.Views.EditRequestWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Редактирование заявки"
+        Width="960"
+        Height="530"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        WindowStartupLocation="CenterOwner"
+        Background="#FFDEA0"
+        FontFamily="Segoe UI"
+        UseLayoutRounding="True">
+
+    <Window.Resources>
+        <Style x:Key="FieldBorder" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Margin" Value="0,0,0,24"/>
+        </Style>
+
+        <Style x:Key="EditorTextBox" TargetType="TextBox">
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="12,0"/>
+        </Style>
+
+        <!-- Стиль для контейнера иконки (красный квадрат) -->
+        <Style x:Key="IconBorder" TargetType="Border">
+            <Setter Property="Width" Value="56"/>
+            <Setter Property="Background" Value="#FF4C61"/>
+            <Setter Property="CornerRadius" Value="20"/>
+        </Style>
+
+        <Style x:Key="RoundedButton" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Foreground" Value="#171717"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="20"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.65"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border BorderBrush="#CCA9E6" BorderThickness="2" CornerRadius="8" Padding="18">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Background="Transparent" MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                <TextBlock x:Name="RequestTitle" VerticalAlignment="Center" FontSize="15" Foreground="#65543D" Text="Заявка"/>
+                <Button Content="✕" Width="44" Height="30" HorizontalAlignment="Right" FontSize="24" Background="#FFF3DA" BorderThickness="0" Cursor="Hand" ToolTip="Сохранить изменения и закрыть" Click="CloseButton_Click"/>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0,12,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="390"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+
+                    <!-- Поле: ФИО клиента -->
+                    <Border Style="{StaticResource FieldBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="56"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource IconBorder}">
+                                <Image Source="/Signs/LoginSign.png" Stretch="Uniform" Margin="12"/>
+                            </Border>
+                            <TextBox x:Name="ClientNameBox" Grid.Column="1" Style="{StaticResource EditorTextBox}" ToolTip="ФИО клиента"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Поле: Телефон -->
+                    <Border Style="{StaticResource FieldBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="56"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource IconBorder}">
+                                <Image Source="/Signs/PhoneSign.png" Stretch="Uniform" Margin="12"/>
+                            </Border>
+                            <TextBox x:Name="PhoneBox" Grid.Column="1" Style="{StaticResource EditorTextBox}" ToolTip="Номер телефона"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Поле: Автомобиль -->
+                    <Border Style="{StaticResource FieldBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="56"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource IconBorder}">
+                                <!-- ВСТАВЬТЕ СВОЮ ИКОНКУ ДЛЯ АВТОМОБИЛЯ -->
+                                <Image Source="/Signs/CarSign.png" Stretch="Uniform" Margin="12"/>
+                            </Border>
+                            <ComboBox x:Name="CarBox" Grid.Column="1" Margin="10,10,12,10" FontSize="18" VerticalContentAlignment="Center" 
+                                      DisplayMemberPath="DisplayText" 
+                                      SelectedValuePath="КодАвтомобиля"
+                                      ToolTip="Автомобиль" SelectionChanged="RentalParameters_Changed"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Поле: Дата начала -->
+                    <Border Style="{StaticResource FieldBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="56"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource IconBorder}">
+
+                                <Image Source="/Signs/WatchSing.png" Stretch="Uniform" Margin="6,5,6,5"/>
+                            </Border>
+                            <DatePicker x:Name="StartDatePicker" Grid.Column="1" Margin="10,12,12,10" FontSize="21" SelectedDateFormat="Short" ToolTip="Дата начала аренды" SelectedDateChanged="RentalParameters_Changed"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Поле: Дата окончания -->
+                    <Border Style="{StaticResource FieldBorder}" Margin="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="56"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource IconBorder}">
+                                <Image Source="/Signs/WatchSing.png" Stretch="Uniform" Margin="6,4,6,1"/>
+                            </Border>
+                            <DatePicker x:Name="EndDatePicker" Grid.Column="1" Margin="10,12,12,10" FontSize="21" SelectedDateFormat="Short" ToolTip="Дата окончания аренды" SelectedDateChanged="RentalParameters_Changed"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <!-- Правая часть (без изменений) -->
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="80"/>
+                    </Grid.RowDefinitions>
+
+                    <Button x:Name="StatusButton" Grid.Row="0" Style="{StaticResource RoundedButton}" Background="#E0E5EB" Click="StatusButton_Click" Content="Статус"/>
+
+                    <StackPanel Grid.Row="2">
+                        <TextBlock x:Name="DailyPriceText" FontSize="25" Margin="0,0,0,12"/>
+                        <TextBlock x:Name="DaysText" FontSize="25" Margin="0,0,0,12"/>
+                        <TextBlock x:Name="TotalText" FontSize="36" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="CalculationHint" Margin="0,12,0,0" FontSize="14" Foreground="#A52A2A" TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <Button Grid.Row="4" Content="Договор" Width="180" Height="80" HorizontalAlignment="Right" Style="{StaticResource RoundedButton}" Background="#13EF00" Click="ContractButton_Click"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
